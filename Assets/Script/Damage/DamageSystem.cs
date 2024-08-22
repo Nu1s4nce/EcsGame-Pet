@@ -1,26 +1,40 @@
-using System.Collections;
-using System.Collections.Generic;
 using Leopotam.Ecs;
-using UnityEngine;
 
-public class DamageSystem : IEcsRunSystem
+public class DamageSystem : IEcsInitSystem
 {
-    private EcsFilter<Health, Damage> filter;
+    private EcsFilter<Health> filter;
     
-    public void Run()
+    private StaticData _staticData;
+    private SceneData _sceneData;
+    private RuntimeData _runtimeData;
+    
+    public void Init()
     {
-        foreach (var i in filter)
+        _sceneData.mainBtn.onClick.AddListener((() =>
         {
-            ref var health = ref filter.Get1(i);
-            ref var damage = ref filter.Get2(i);
+            foreach (var i in filter)
+            {
+                ref var health = ref filter.Get1(i);
             
-            health.healthCount -= damage.clickDamage;
-            
-        }
+                health.healthCount -= _staticData.clickDamage;
+                if (_runtimeData.IsServer)
+                {
+                    _runtimeData._server.SendMessageToAllSockets(new DataStruct
+                    {
+                        header = "simple",
+                        message = "clickFromServer"
+                    });
+                }
+                else
+                {
+                    _runtimeData._client.SendMessageToSocket(new DataStruct
+                    {
+                        header = "simple",
+                        message = "click"
+                    });
+                }
+            }
+        }));
+        
     }
-}
-
-public struct Damage
-{
-    public int clickDamage;
 }

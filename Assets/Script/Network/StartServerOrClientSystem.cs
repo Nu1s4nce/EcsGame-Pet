@@ -1,18 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Net;
+using Leopotam.Ecs;
 using UnityEngine;
 
-public class StartServerOrClientSystem : MonoBehaviour
+public class StartServerOrClientSystem : IEcsInitSystem
 {
-    // Start is called before the first frame update
-    void Start()
+    private RuntimeData _runtimeData;
+    private SceneData _sceneData;
+    private StaticData _staticData;
+    
+    public void Init()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _sceneData.hostBtn.onClick.AddListener(() =>
+        {
+            _runtimeData._server = new Server();
+            _runtimeData._server.StartServer(_staticData.PORT);
+            _runtimeData.IsServer = true;
+        });
+        _sceneData.joinBtn.onClick.AddListener(() =>
+        {
+            _runtimeData._client = new Client();
+            EndPoint endPoint = new IPEndPoint(IPAddress.Parse(_staticData.ServerEndPoint), _staticData.PORT);
+            _runtimeData._client.ConnectTo(endPoint);
+            _runtimeData.IsServer = false;
+        });
     }
 }

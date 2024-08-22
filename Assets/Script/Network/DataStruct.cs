@@ -1,18 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Runtime.InteropServices;
 
-public class DataStruct : MonoBehaviour
+public struct DataStruct
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 10)]
+    public string header;
+    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 50)]
+    public string message;
 }

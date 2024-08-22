@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Leopotam.Ecs;
 
-public class HealthViewSystem : MonoBehaviour
+public class HealthViewSystem : IEcsRunSystem
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private EcsFilter<Health> filter;
+    private SceneData _sceneData;
 
-    // Update is called once per frame
-    void Update()
+    public void Run()
     {
-        
+        foreach (var i in filter)
+        {
+            ref var health = ref filter.Get1(i);
+
+            _sceneData.healthSlider.value = health.healthCount;
+            _sceneData.healthText.text = health.healthCount.ToString();
+        }
     }
 }

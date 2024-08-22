@@ -1,23 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using UnityEngine;
-using Zenject;
 
 public class Client
 {
-    private Socket _client;
+    private static Socket _client;
     private byte[] _buffer = new byte[512];
-    
-    private PointsManager _pointsManager;
-    
-    [Inject]
-    private void Init(PointsManager pointsManager)
-    {
-        _pointsManager = pointsManager;
-    }
     
     public Client()
     {
@@ -47,15 +40,15 @@ public class Client
             {
                 namesList.Add(str);
             }
-            _pointsManager.SetUpNames(namesList);
+            //_pointsManager.SetUpNames(namesList);
         }
         switch (response)
         {
             case "clickApproved":
-                _pointsManager.HandleClick();
+                //_pointsManager.HandleClick();
                 break;
             case "clickFromServer":
-                _pointsManager.HandleClick();
+                //_pointsManager.HandleClick();
                 break;
         }
     }
@@ -77,6 +70,7 @@ public class Client
         try
         {
             _client.ConnectAsync(endPoint);
+            Debug.Log($"Successfully Connected to {endPoint}");
         }
         catch(SocketException ex)
         {
@@ -86,13 +80,45 @@ public class Client
         StartReceivingMessages();
     }
     
-    public async void SendMessageToSocket(string msg)
+    public async void SendMessageToSocket(DataStruct msg)
     {
-        byte[] smth = Encoding.ASCII.GetBytes(msg);
+        byte[] smth = getBytes(msg);
         await _client.SendAsync(smth, SocketFlags.None);
         Debug.Log(msg);
     }
-
+    private byte[] getBytes(DataStruct str) {
+        int size = Marshal.SizeOf(str);
+        byte[] arr = new byte[size];
+        IntPtr ptr = IntPtr.Zero;
+        try
+        {
+            ptr = Marshal.AllocHGlobal(size);
+            Marshal.StructureToPtr(str, ptr, true);
+            Marshal.Copy(ptr, arr, 0, size);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(ptr);
+        }
+        return arr;
+    }
+    private DataStruct fromBytes(byte[] arr)
+    {
+        DataStruct str = new DataStruct();
+        int size = Marshal.SizeOf(str);
+        IntPtr ptr = IntPtr.Zero;
+        try
+        {
+            ptr = Marshal.AllocHGlobal(size);
+            Marshal.Copy(arr, 0, ptr, size);
+            str = (DataStruct)Marshal.PtrToStructure(ptr, str.GetType());
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(ptr);
+        }
+        return str;
+    }
     public void ShutDownSocket()
     {
         _client.Shutdown(SocketShutdown.Both);

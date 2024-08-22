@@ -12,3 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2cdf26facb53d34997e5926f431520e, type: 3}
   m_Name: MainData
   m_EditorClassIdentifier: 
+  defaultHealth: 100
+  clickDamage: 1
+  PORT: 5000
+  ServerEndPoint: 26.83.224.25

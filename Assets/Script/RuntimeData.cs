@@ -1,18 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class RuntimeData : MonoBehaviour
+public class RuntimeData
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Server _server;
+    public Client _client;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public bool IsServer;
+    public DataStruct DataStruct;
 }

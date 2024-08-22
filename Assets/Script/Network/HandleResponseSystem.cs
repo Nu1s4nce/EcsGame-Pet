@@ -1,18 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Leopotam.Ecs;
 
-public class HandleResponseSystem : MonoBehaviour
+public class HandleResponseSystem : IEcsRunSystem
 {
-    // Start is called before the first frame update
-    void Start()
+    
+    public void Run()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+            
     }
 }

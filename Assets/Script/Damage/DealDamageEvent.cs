@@ -1,4 +1,1 @@
-﻿public struct DealDamageEvent
-{
-    
-}
+﻿public struct DealDamageEvent {}

@@ -1,18 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
+using Leopotam.Ecs;
 using UnityEngine;
 
-public class HealthInitSystem : MonoBehaviour
+public class HealthInitSystem : IEcsInitSystem
 {
-    // Start is called before the first frame update
-    void Start()
+    private EcsWorld _ecsWorld;
+    private StaticData _staticData;
+    private SceneData _sceneData;
+    
+    public void Init()
     {
-        
-    }
+        EcsEntity healthEntity = _ecsWorld.NewEntity();
 
-    // Update is called once per frame
-    void Update()
-    {
+        ref var health = ref healthEntity.Get<Health>();
+
+        health.healthCount = _staticData.defaultHealth;
         
+        _sceneData.healthSlider.value = health.healthCount;
+        _sceneData.healthText.text = health.healthCount.ToString();
+        
+        Debug.Log(health.healthCount);
     }
 }

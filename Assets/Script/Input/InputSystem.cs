@@ -1,17 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Leopotam.Ecs;
 
-public class InputSystem : MonoBehaviour
+public class InputSystem : IEcsRunSystem
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
+    public void Run()
     {
         
     }

@@ -1,18 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
-public class StaticData : MonoBehaviour
+[CreateAssetMenu]
+public class StaticData : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public int defaultHealth;
+    public int clickDamage;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int PORT;
+    public string ServerEndPoint;
 }
